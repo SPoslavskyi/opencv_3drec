@@ -23,9 +23,13 @@ def undistPhoto(fname):
     return udfname
 
 
+# img1 = cv.imread(undistPhoto("../sample/DJI_0359.JPG"),0)  #queryimage # left image
+# img2 = cv.imread(undistPhoto("../sample/DJI_0360.JPG"),0) #trainimage # right image
+img1 = cv.imread("./sample/1_1.jpg", 0)  # queryimage # left image
+img2 = cv.imread("./sample/1_3.JPG", 0)  # trainimage # right image
+plt.imshow(img1), plt.show()
 
-img1 = cv.imread(undistPhoto("../sample/DJI_0359.JPG"),0)  #queryimage # left image
-img2 = cv.imread(undistPhoto("../sample/DJI_0360.JPG"),0) #trainimage # right image
+
 orb = cv.ORB_create()
 # find the keypoints and descriptors
 
@@ -33,8 +37,8 @@ kp1 = orb.detect(img1, None)
 kp1, des1 = orb.compute(img1, kp1)
 kp2 = orb.detect(img2, None)
 kp2, des2 = orb.compute(img2, kp2)
-img3 = cv.drawKeypoints(img2, kp2, None, color=(0,255,0), flags=0)
-#plt.imshow(img3), plt.show()
+#img3 = cv.drawKeypoints(img2, kp2, None, color=(0,255,0), flags=0)
+plt.imshow(img1), plt.show()
 # FLANN parameters
 FLANN_INDEX_LSH = 6
 index_params = dict(algorithm = FLANN_INDEX_LSH, table_number = 6, key_size = 12, multi_probe_level = 1)
