@@ -4,7 +4,7 @@ import cv2 as cv
 import numpy as np
 
 
-img1 = cv.imread("./sample/1_1.jpg", 0)  # queryimage # left image
+img1 = cv.imread("./sample/1_1_s2.jpg", 0)  # queryimage # left image
 img2 = cv.imread("./sample/1_3.JPG", 0)  # trainimage # right image
 img2= cv.rotate(img2,cv.ROTATE_90_CLOCKWISE)
 

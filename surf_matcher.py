@@ -4,26 +4,29 @@ import cv2 as cv
 import numpy as np
 
 
-img1 = cv.imread("./sample/map_google.jpg", 0)  # queryimage # left image
+img1 = cv.imread("./sample/map_bing.jpg", 0)  # queryimage # left image
 img2 = cv.imread("./sample/sample2.JPG", 0)  # trainimage # right image
 
+
 # Initiate SIFT detector
-sift = cv.xfeatures2d.SIFT_create()
+surf = cv.xfeatures2d.SURF_create(1000)
 # find the keypoints and descriptors with SIFT
-kp1, des1 = sift.detectAndCompute(img1,None)
-kp2, des2 = sift.detectAndCompute(img2,None)
+kp1, des1 = surf.detectAndCompute(img1,None)
+kp2, des2 = surf.detectAndCompute(img2,None)
 
 # BFMatcher with default params
 bf = cv.BFMatcher()
 matches = bf.knnMatch(des1,des2,k=2)
 # Apply ratio test
 good = []
-
-
+for m,n in matches:
+    if m.distance < 0.75*n.distance:
+        good.append([m])
+# cv.drawMatchesKnn expects list of lists as matches.
 matchesMask = [[0,0] for i in range(len(matches))]
 # ratio test as per Lowe's paper
 for i,(m,n) in enumerate(matches):
-    if m.distance < 0.65*n.distance:
+    if m.distance < 0.7*n.distance:
         matchesMask[i]=[1,0]
 
 draw_params = dict(matchColor = (0,255,0),
@@ -31,7 +34,6 @@ draw_params = dict(matchColor = (0,255,0),
                    matchesMask = matchesMask,
                    flags = cv.DrawMatchesFlags_DEFAULT)
 img3 = cv.drawMatchesKnn(img1,kp1,img2,kp2,matches,None,**draw_params)
-
 plt.imshow(img3),plt.show()
 
 # FLANN parameters
@@ -44,7 +46,7 @@ matches = flann.knnMatch(des1,des2,k=2)
 matchesMask = [[0,0] for i in range(len(matches))]
 # ratio test as per Lowe's paper
 for i,(m,n) in enumerate(matches):
-    if m.distance < 0.65*n.distance:
+    if m.distance < 0.75*n.distance:
         matchesMask[i]=[1,0]
 draw_params = dict(matchColor = (0,255,0),
                    singlePointColor = (255,0,0),
